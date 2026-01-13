@@ -8,6 +8,8 @@ import sys
 import csv
 import os
 from datetime import datetime
+from pathlib import Path
+import glob
 
 
 def format_time(timestamp):
@@ -134,8 +136,8 @@ def main(filename=None):
     """Main function to parse and display prices"""
 
     if not filename:
-        import glob
-        files = glob.glob('/home/salim/projects/temp_pa/api_responses_*.json')
+        script_dir = Path(__file__).parent
+        files = list(script_dir.glob('api_responses_*.json'))
         if not files:
             print("❌ No API response files found!")
             return
@@ -221,8 +223,9 @@ def main(filename=None):
 
     # Save to CSV file with timestamp
     if all_tickets:
-        csv_file = '/home/salim/projects/temp_pa/flight_prices.csv'
-        file_exists = os.path.exists(csv_file)
+        script_dir = Path(__file__).parent
+        csv_file = script_dir / 'flight_prices.csv'
+        file_exists = csv_file.exists()
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 

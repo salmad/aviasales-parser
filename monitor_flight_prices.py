@@ -8,6 +8,7 @@ import asyncio
 from playwright.async_api import async_playwright
 import json
 from datetime import datetime
+from pathlib import Path
 
 
 async def monitor_flight_prices(url: str, wait_time: int = 30):
@@ -80,7 +81,8 @@ async def monitor_flight_prices(url: str, wait_time: int = 30):
         # Save API responses
         if api_responses:
             print(f"\n💾 Captured {len(api_responses)} API responses")
-            api_file = f"/home/salim/projects/temp_pa/api_responses_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            output_dir = Path(__file__).parent
+            api_file = output_dir / f"api_responses_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(api_file, 'w', encoding='utf-8') as f:
                 json.dump(api_responses, f, ensure_ascii=False, indent=2)
             print(f"💾 API responses saved to: {api_file}")
@@ -98,8 +100,9 @@ async def monitor_flight_prices(url: str, wait_time: int = 30):
                     pass
 
         # Take screenshot
-        screenshot_path = f"/home/salim/projects/temp_pa/aviasales_screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-        await page.screenshot(path=screenshot_path, full_page=True)
+        output_dir = Path(__file__).parent
+        screenshot_path = output_dir / f"aviasales_screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        await page.screenshot(path=str(screenshot_path), full_page=True)
         print(f"\n📸 Screenshot saved to: {screenshot_path}")
 
         await browser.close()

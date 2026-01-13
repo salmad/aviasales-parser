@@ -7,10 +7,12 @@ import csv
 import sys
 from collections import defaultdict
 from datetime import datetime
+from pathlib import Path
 
 
 def main():
-    csv_file = '/home/salim/projects/temp_pa/flight_prices.csv'
+    script_dir = Path(__file__).parent
+    csv_file = script_dir / 'flight_prices.csv'
 
     try:
         with open(csv_file, 'r', encoding='utf-8') as f:
